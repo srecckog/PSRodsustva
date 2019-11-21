@@ -1,0 +1,11 @@
+C:\Users\jplaninic\Source\Repos\NormeRadnika\obj\Debug\NormeRadnika.csprojAssemblyReference.cache
+C:\Users\jplaninic\Source\Repos\NormeRadnika\obj\Debug\NormeRadnika.csproj.CoreCompileInputs.cache
+C:\Users\jplaninic\Source\Repos\NormeRadnika\bin\Debug\NormeRadnika.exe.config
+C:\Users\jplaninic\Source\Repos\NormeRadnika\bin\Debug\NormeRadnika.exe
+C:\Users\jplaninic\Source\Repos\NormeRadnika\bin\Debug\NormeRadnika.pdb
+C:\Users\jplaninic\Source\Repos\NormeRadnika\obj\Debug\NormeRadnika.exe
+C:\Users\jplaninic\Source\Repos\NormeRadnika\obj\Debug\NormeRadnika.pdb
+C:\Users\jplaninic\Source\Repos\NormeRadnika\bin\Debug\NormeRadnika.exe.manifest
+C:\Users\jplaninic\Source\Repos\NormeRadnika\bin\Debug\NormeRadnika.application
+C:\Users\jplaninic\Source\Repos\NormeRadnika\obj\Debug\NormeRadnika.exe.manifest
+C:\Users\jplaninic\Source\Repos\NormeRadnika\obj\Debug\NormeRadnika.application
