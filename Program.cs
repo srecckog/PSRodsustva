@@ -18,47 +18,52 @@ namespace NormeRadnika
         static void Main(string[] args)
         {
             string connectionString = @"Data Source=192.168.0.3;Initial Catalog=FeroApp;User ID=sa;Password=AdminFX9.";
-            string connectionStringr = @"Data Source=192.168.0.3;Initial Catalog=RFIND;User ID=sa;Password=AdminFX9.";
+            string connectionStringr = @"Data Source=192.168.0.3;Initial Catalog=fx_RFIND;User ID=sa;Password=AdminFX9.";
             DateTime dat1 = DateTime.Now.AddDays(-1); ;
             DateTime dat10 = DateTime.Now.AddDays(-1); ;
             string mm1 = "";
         
             var today = DateTime.Today;
+            today = DateTime.Today.AddDays(0);
             var month = new DateTime(today.Year, today.Month, 1);
             var first = month.AddMonths(-1);
             var last = month.AddDays(-1);
             int zadnjiDan = last.Day;
             int mjesec = first.Month;
             int godina = first.Year;
-
+            if (args.Length > 1)
+            {
+                mjesec = (int.Parse)(args[0]);
+                godina = (int.Parse)(args[1]);                
+            }
+            
 
             for (int dan1 = 1; dan1<=zadnjiDan; dan1++)
             {
                 
                 dat1 = new DateTime(godina, mjesec, dan1 );
-              
-
+                
                 if (dat1.Month <= 9)
                     mm1 = "0";
                 string dats = dat1.Year.ToString() + '-' + mm1 + dat1.Month.ToString() + '-' + dat1.Day.ToString();  // današnji datum
                 string dats2 = dat1.Day.ToString() + '.' + mm1 + dat1.Month.ToString() +'.' + dat1.Year.ToString() ;  // današnji datum
                 string id1, firma1, ime1, opis1;
+                
 
                 using (SqlConnection cnr = new SqlConnection(connectionStringr))
                 {
                     cnr.Open();
-                    string sql1r = "delete from rfind.dbo.PSRodsustva where datum='" + dats + "'";
+                    string sql1r = "delete from fx_rfind.dbo.PSRodsustva where datum='" + dats + "'";
                     SqlCommand sqlCommand2 = new SqlCommand(sql1r, cnr);
                     SqlDataReader reader2 = sqlCommand2.ExecuteReader();
 
                     cnr.Close();
                 }
-
                 //// odsustva
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
                     cn.Open();
-                    string sql1 = "rfind.dbo.PSR_odsustva '" + dats + "',1";
+                    string sql1 = "fx_rfind.dbo.PSR_odsustva '" + dats + "',1";
                     SqlCommand sqlCommand = new SqlCommand(sql1, cn);
 
                     SqlDataReader reader = sqlCommand.ExecuteReader();
@@ -70,11 +75,10 @@ namespace NormeRadnika
                         ime1 = (reader["ime"].ToString());
                         opis1 = (reader["danpsr"].ToString());
 
-
                         using (SqlConnection cnr = new SqlConnection(connectionStringr))
                         {
                             cnr.Open();
-                            string sql1r = "insert into rfind.dbo.PSRodsustva(DATUM,ID,idfirme,opis,ime) values('" + dats + "'," + id1 + "," + firma1 + ",'" + opis1 + "','" + ime1 + "')";
+                            string sql1r = "insert into fx_rfind.dbo.PSRodsustva(DATUM,ID,idfirme,opis,ime) values('" + dats + "'," + id1 + "," + firma1 + ",'" + opis1 + "','" + ime1 + "')";
                             SqlCommand sqlCommand2 = new SqlCommand(sql1r, cnr);
                             SqlDataReader reader2 = sqlCommand2.ExecuteReader();
 
@@ -88,18 +92,19 @@ namespace NormeRadnika
                 using (SqlConnection cnr = new SqlConnection(connectionStringr))
                 {
                     cnr.Open();
-                    string sql1r = "delete from rfind.dbo.PSRprisustva where datum='" + dats + "'";
+                    string sql1r = "delete from fx_rfind.dbo.PSRprisustva where datum='" + dats + "'";
                     SqlCommand sqlCommand2 = new SqlCommand(sql1r, cnr);
                     SqlDataReader reader2 = sqlCommand2.ExecuteReader();
 
                     cnr.Close();
+                    
                 }
 
 
                 using (SqlConnection cn = new SqlConnection(connectionString))
                 {
                     cn.Open();
-                    string sql1 = "rfind.dbo.PSR_odsustva '" + dats + "',0";
+                    string sql1 = "fx_rfind.dbo.PSR_odsustva '" + dats + "',0";
                     SqlCommand sqlCommand = new SqlCommand(sql1, cn);
                     int bsati = 0;
                     string opis0 = "";
@@ -107,6 +112,7 @@ namespace NormeRadnika
 
                     while (reader.Read())
                     {
+                        
                         bsati = 0;
                         id1 = (reader["radnikid"].ToString());
                         firma1 = (reader["firma"].ToString());
@@ -131,11 +137,15 @@ namespace NormeRadnika
                             bsati = bsatt + bsati;
 
                             opis1 = o1[1];
+                            if (opis1 != "")
+                            {
 
-                            opis1 = opis1.Replace("p", "");
-                            opis1 = opis1.Replace("j", "");
-                            opis1 = opis1.Replace("n", "");                            
-                            bsati = bsati + bsatt + int.Parse(opis1);
+                                opis1 = opis1.Replace("p", "");
+                                opis1 = opis1.Replace("j", "");
+                                opis1 = opis1.Replace("n", "");
+                             
+                                bsati = bsati + bsatt + int.Parse(opis1);
+                            }
 
                         }
                         else
@@ -147,7 +157,7 @@ namespace NormeRadnika
                             }
                             else if ( opis1.Contains('y') || opis1.Contains('l') || opis1.Contains('g'))
                             {
-                                bsati = 8;
+                                bsati = 7;
                             }
                             else
                             {
@@ -167,7 +177,7 @@ namespace NormeRadnika
                         using (SqlConnection cnr = new SqlConnection(connectionStringr))
                         {
                             cnr.Open();
-                            string sql1r = "insert into rfind.dbo.PSRprisustva(DATUM,ID,idfirme,opis,ime,sati) values('" + dats + "'," + id1 + "," + firma1 + ",'" + opis0 + "','" + ime1 + "',"+bsati.ToString()+")";
+                            string sql1r = "insert into fx_rfind.dbo.PSRprisustva(DATUM,ID,idfirme,opis,ime,sati) values('" + dats + "'," + id1 + "," + firma1 + ",'" + opis0 + "','" + ime1 + "',"+bsati.ToString()+")";
                             SqlCommand sqlCommand2 = new SqlCommand(sql1r, cnr);
                             SqlDataReader reader2 = sqlCommand2.ExecuteReader();
 
